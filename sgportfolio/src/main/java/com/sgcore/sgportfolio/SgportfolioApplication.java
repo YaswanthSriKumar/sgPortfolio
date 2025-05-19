@@ -12,4 +12,22 @@ public class SgportfolioApplication {
 		SpringApplication.run(SgportfolioApplication.class, args);
 	}
 
+	/*{
+		"portfolioId": 1,
+			"portfolioName":"test1" ,
+			"portfolioImage":"" ,
+			"portfolioDescription":"test1",
+			"portfolioShow":true,
+			"SectorEntity":[
+		{
+			"sectorId":1,
+				"sectorName":"test1",
+				"sectorImage":""
+		}
+    ]
+
+	}*/
+
+
+
 }
