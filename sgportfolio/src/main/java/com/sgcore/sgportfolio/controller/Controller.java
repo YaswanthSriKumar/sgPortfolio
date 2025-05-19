@@ -3,6 +3,7 @@ package com.sgcore.sgportfolio.controller;
 import java.io.IOException;
 import java.util.List;
 
+import com.sgcore.sgportfolio.entity.PortfolioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,5 +74,10 @@ public class Controller {
 		return portfolioService.updateportfolio(portfolioId,portfolioName,portfolioDescription,portfolioShow,portfolioImage);
 		
 	}
+	@PostMapping("/saveportfoliowithsector")
+	public PortfolioEntity creaePortfolio(@RequestBody PortfolioEntity portfolioEntity){
+		return portfolioService.savePortfolioWithSector(portfolioEntity);
+	}
+
 }
 

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import com.sgcore.sgportfolio.entity.SectorEntity;
+import com.sgcore.sgportfolio.repository.SectorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ public class PortfolioService {
 
 	@Autowired
 	PortfolioRepo portfolioRepo;
+	@Autowired
+	SectorRepo sectorRepo;
 	public ResponseEntity<String> addportfolio(String portfolioName, String portfolioDescription, Boolean portfolioShow,
 			MultipartFile portfolioImage) throws IOException {
 		PortfolioEntity portfolioEntity = new PortfolioEntity();
@@ -149,8 +153,19 @@ public class PortfolioService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("user not found");
 
 		}
-	
 	}
+
+	public PortfolioEntity savePortfolioWithSector(PortfolioEntity portfolioEntity){
+     List<SectorEntity> sectorEntityList=portfolioEntity.getSectorEntity();
+	 if(sectorEntityList != null){
+            for(SectorEntity sector:sectorEntityList){
+				sector.setPortfolioEntity(portfolioEntity);
+			}
+	 }
+		return portfolioRepo.save(portfolioEntity);
+
+	}
+
 	
 
 }

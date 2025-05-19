@@ -1,12 +1,8 @@
 package com.sgcore.sgportfolio.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name="portfolio")
@@ -21,6 +17,10 @@ public class PortfolioEntity {
 	@Column(name="portfolio_discription")
 	private String portfolioDescription;
 	private boolean portfolioShow;
+
+	@OneToMany(mappedBy = "PortfolioEntity",cascade = CascadeType.ALL,orphanRemoval = true)
+	List<SectorEntity> SectorEntity;
+
 	public int getPortfolioId() {
 		return portfolioId;
 	}
@@ -51,6 +51,12 @@ public class PortfolioEntity {
 	public void setPortfolioShow(boolean portfolioShow) {
 		this.portfolioShow = portfolioShow;
 	}
-	
-	
+
+	public List<SectorEntity> getSectorEntity() {
+		return SectorEntity;
+	}
+
+	public void setSectorEntity(List<SectorEntity> sectorEntity) {
+		SectorEntity = sectorEntity;
+	}
 }
