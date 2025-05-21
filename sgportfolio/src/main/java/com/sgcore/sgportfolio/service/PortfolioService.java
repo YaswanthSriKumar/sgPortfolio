@@ -35,6 +35,7 @@ public class PortfolioService {
 		portfolioEntity.setPortfolioName(portfolioName);
 		portfolioEntity.setPortfolioDescription(portfolioDescription);
 		portfolioEntity.setPortfolioShow(portfolioShow);
+		
 		portfolioEntity.setSectorEntity(sectorEntity);
 		if (portfolioImage != null && !portfolioImage.isEmpty()) {
             portfolioEntity.setPortfolioImage(portfolioImage.getBytes());
@@ -61,6 +62,7 @@ public class PortfolioService {
 		       
 		        dto.setPortfolioImage("http://localhost:8088/SGPORTFOLIO/image/" + portfolio.getPortfolioId()); // Construct image URL
 		        System.out.println( dto.getPortfolioImage());
+		        portfolio.getSectorEntity().setSectorImage(null);
 		        dto.setSector(portfolio.getSectorEntity());
 		        return dto;
 		    }).toList();
@@ -176,8 +178,14 @@ public class PortfolioService {
 	
 	public ResponseEntity<List<SectorEntity>> getSectors() {
 		Optional<List<SectorEntity>> result=Optional.of(sectorRepo.findAll()) ;
-		if(result.isPresent())
+		
+		if(result.isPresent()) {
+			List<SectorEntity> sectorData=result.get().stream().map((sector)->{
+				sector.setSectorImage(null);
+				return sector;
+			}).toList();
             return ResponseEntity.status(HttpStatus.OK).body(result.get());
+		}
 		else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.get());}
 	}
