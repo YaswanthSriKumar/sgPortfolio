@@ -6,6 +6,9 @@ import java.util.Optional;
 
 import com.sgcore.sgportfolio.entity.SectorEntity;
 import com.sgcore.sgportfolio.repository.SectorRepo;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,12 +29,12 @@ public class PortfolioService {
 	SectorRepo sectorRepo;
 	public ResponseEntity<String> addportfolio(String portfolioName, String portfolioDescription, Boolean portfolioShow,
 			MultipartFile portfolioImage,int sectorId) throws IOException {
+		SectorEntity sectorEntity = sectorRepo.findById(sectorId)
+		        .orElseThrow(() -> new EntityNotFoundException("Sector not found"));
 		PortfolioEntity portfolioEntity = new PortfolioEntity();
 		portfolioEntity.setPortfolioName(portfolioName);
 		portfolioEntity.setPortfolioDescription(portfolioDescription);
 		portfolioEntity.setPortfolioShow(portfolioShow);
-		SectorEntity sectorEntity = new SectorEntity();
-		sectorEntity.setSectorId(sectorId);
 		portfolioEntity.setSectorEntity(sectorEntity);
 		if (portfolioImage != null && !portfolioImage.isEmpty()) {
             portfolioEntity.setPortfolioImage(portfolioImage.getBytes());
@@ -129,7 +132,8 @@ public class PortfolioService {
 	}
 	public ResponseEntity<String> updateportfolio(int portfolioId, String portfolioName, String portfolioDescription,
 			Boolean portfolioShow, MultipartFile portfolioImage,int sectorId) throws IOException {
-		
+		SectorEntity sectorEntity = sectorRepo.findById(sectorId)
+		        .orElseThrow(() -> new EntityNotFoundException("Sector not found"));
 		Optional<PortfolioEntity> dbresult= portfolioRepo.findById(portfolioId);
 		if(dbresult.isPresent())
 		{
@@ -139,8 +143,7 @@ public class PortfolioService {
 			portfolioEntity.setPortfolioName(portfolioName);
 			portfolioEntity.setPortfolioDescription(portfolioDescription);
 			portfolioEntity.setPortfolioShow(portfolioShow);
-			SectorEntity sectorEntity = new SectorEntity();
-			sectorEntity.setSectorId(sectorId);
+			
 			portfolioEntity.setSectorEntity(sectorEntity);
 			if (portfolioImage != null && !portfolioImage.isEmpty()) {
 	            byte[] imageBytes = portfolioImage.getBytes(); // Read file as bytes
