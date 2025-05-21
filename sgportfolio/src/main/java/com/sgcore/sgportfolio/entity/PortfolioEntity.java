@@ -18,9 +18,16 @@ public class PortfolioEntity {
 	private String portfolioDescription;
 	private boolean portfolioShow;
 
-	@OneToMany(mappedBy = "PortfolioEntity",cascade = CascadeType.ALL,orphanRemoval = true)
-	List<SectorEntity> SectorEntity;
+	@ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sectorId",nullable = false)
+	private SectorEntity SectorEntity;
 
+	public SectorEntity getSectorEntity() {
+		return SectorEntity;
+	}
+	public void setSectorEntity(SectorEntity sectorEntity) {
+		SectorEntity = sectorEntity;
+	}
 	public int getPortfolioId() {
 		return portfolioId;
 	}
@@ -52,11 +59,5 @@ public class PortfolioEntity {
 		this.portfolioShow = portfolioShow;
 	}
 
-	public List<SectorEntity> getSectorEntity() {
-		return SectorEntity;
-	}
-
-	public void setSectorEntity(List<SectorEntity> sectorEntity) {
-		SectorEntity = sectorEntity;
-	}
+	
 }

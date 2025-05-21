@@ -1,5 +1,7 @@
 package com.sgcore.sgportfolio.dto;
 
+import com.sgcore.sgportfolio.entity.SectorEntity;
+
 public class PortfolioDto {
 
 	private int portfolioId;
@@ -7,6 +9,15 @@ public class PortfolioDto {
 	private String portfolioImage;
 	private String portfolioDescription;
 	private boolean portfolioShow;
+	private SectorEntity sector;
+	
+	
+	public SectorEntity getSector() {
+		return sector;
+	}
+	public void setSector(SectorEntity sector) {
+		this.sector = sector;
+	}
 	public int getPortfolioId() {
 		return portfolioId;
 	}

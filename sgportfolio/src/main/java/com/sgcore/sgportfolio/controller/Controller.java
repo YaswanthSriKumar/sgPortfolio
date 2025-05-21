@@ -3,7 +3,6 @@ package com.sgcore.sgportfolio.controller;
 import java.io.IOException;
 import java.util.List;
 
-import com.sgcore.sgportfolio.entity.PortfolioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sgcore.sgportfolio.dto.PortfolioDto;
+import com.sgcore.sgportfolio.entity.PortfolioEntity;
+import com.sgcore.sgportfolio.entity.SectorEntity;
 import com.sgcore.sgportfolio.service.PortfolioService;
 
 @RestController
@@ -26,14 +27,16 @@ public class Controller {
 	
 	@PostMapping("/uploadportfolio")
 	public ResponseEntity<String> uploadPortfolio( @RequestParam("portfolioName") String portfolioName,
+			
 	        @RequestParam("portfolioDescription") String portfolioDescription,
 	        @RequestParam("portfolioShow") Boolean portfolioShow,
-	        @RequestParam("portfolioImage") MultipartFile portfolioImage ) throws IOException
+	        @RequestParam("portfolioImage") MultipartFile portfolioImage,
+	        @RequestParam("sectorId") int sectorId) throws IOException
 	{
 		System.out.println("got in");
 		System.out.println("service name"+portfolioName);
 		System.out.println("service image"+portfolioImage);
-		return portfolioService.addportfolio(portfolioName,portfolioDescription,portfolioShow,portfolioImage);
+		return portfolioService.addportfolio(portfolioName,portfolioDescription,portfolioShow,portfolioImage,sectorId);
 		
 	}
 	
@@ -65,18 +68,26 @@ public class Controller {
 	public ResponseEntity<String> updatePortfolio(@RequestParam("portfolioid") int portfolioId, @RequestParam("portfolioName") String portfolioName,
 	        @RequestParam("portfolioDescription") String portfolioDescription,
 	        @RequestParam("portfolioShow") Boolean portfolioShow,
-	        @RequestParam("portfolioImage") MultipartFile portfolioImage ) throws IOException
+	        @RequestParam("portfolioImage") MultipartFile portfolioImage,
+	        @RequestParam("sectorId") int sectorId) throws IOException
 	{
 		System.out.println("got in");
 		System.out.println("service name"+portfolioName);
 		System.out.println("service image"+portfolioImage);
 		System.out.println("service portfolioid"+portfolioId);
-		return portfolioService.updateportfolio(portfolioId,portfolioName,portfolioDescription,portfolioShow,portfolioImage);
+		return portfolioService.updateportfolio(portfolioId,portfolioName,portfolioDescription,portfolioShow,portfolioImage,sectorId);
 		
 	}
-	@PostMapping("/saveportfoliowithsector")
-	public PortfolioEntity creaePortfolio(@RequestBody PortfolioEntity portfolioEntity){
-		return portfolioService.savePortfolioWithSector(portfolioEntity);
+//    methods for Sectors______________________________________________________
+	@PostMapping("/uploadsector")
+	public ResponseEntity<SectorEntity> uploadSector( @RequestParam("sectorName") String sectorName,  @RequestParam("sectorImage") MultipartFile sectorImage ) throws IOException{
+		return portfolioService.uploadSector(sectorName,sectorImage);
+	}
+	
+	@GetMapping("/getSectors")
+	public ResponseEntity<List<SectorEntity>> getSectors()
+	{
+		return portfolioService.getSectors();
 	}
 
 }

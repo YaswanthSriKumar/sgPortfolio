@@ -12,9 +12,7 @@ public class SectorEntity {
     @Lob
     private byte[] sectorImage;
 
-    @ManyToOne
-    @JoinColumn(name = "portfolioId",nullable = false)
-    private PortfolioEntity portfolioEntity;
+ 
 
     public int getSectorId() {
         return sectorId;
@@ -40,11 +38,5 @@ public class SectorEntity {
         this.sectorImage = sectorImage;
     }
 
-    public PortfolioEntity getPortfolioEntity() {
-        return portfolioEntity;
-    }
-
-    public void setPortfolioEntity(PortfolioEntity portfolioEntity) {
-        this.portfolioEntity = portfolioEntity;
-    }
+    
 }

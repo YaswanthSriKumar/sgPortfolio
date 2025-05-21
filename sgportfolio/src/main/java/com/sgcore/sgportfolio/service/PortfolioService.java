@@ -25,14 +25,16 @@ public class PortfolioService {
 	@Autowired
 	SectorRepo sectorRepo;
 	public ResponseEntity<String> addportfolio(String portfolioName, String portfolioDescription, Boolean portfolioShow,
-			MultipartFile portfolioImage) throws IOException {
+			MultipartFile portfolioImage,int sectorId) throws IOException {
 		PortfolioEntity portfolioEntity = new PortfolioEntity();
 		portfolioEntity.setPortfolioName(portfolioName);
 		portfolioEntity.setPortfolioDescription(portfolioDescription);
 		portfolioEntity.setPortfolioShow(portfolioShow);
+		SectorEntity sectorEntity = new SectorEntity();
+		sectorEntity.setSectorId(sectorId);
+		portfolioEntity.setSectorEntity(sectorEntity);
 		if (portfolioImage != null && !portfolioImage.isEmpty()) {
-            byte[] imageBytes = portfolioImage.getBytes(); // Read file as bytes
-            portfolioEntity.setPortfolioImage(imageBytes);
+            portfolioEntity.setPortfolioImage(portfolioImage.getBytes());
         } else {
             return ResponseEntity.badRequest().body("Image path is missing or invalid");
         }
@@ -56,6 +58,7 @@ public class PortfolioService {
 		       
 		        dto.setPortfolioImage("http://localhost:8088/SGPORTFOLIO/image/" + portfolio.getPortfolioId()); // Construct image URL
 		        System.out.println( dto.getPortfolioImage());
+		        dto.setSector(portfolio.getSectorEntity());
 		        return dto;
 		    }).toList();
 		    return ResponseEntity.status(HttpStatus.OK).body(resultDto);
@@ -125,7 +128,7 @@ public class PortfolioService {
 		 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("record not found");
 	}
 	public ResponseEntity<String> updateportfolio(int portfolioId, String portfolioName, String portfolioDescription,
-			Boolean portfolioShow, MultipartFile portfolioImage) throws IOException {
+			Boolean portfolioShow, MultipartFile portfolioImage,int sectorId) throws IOException {
 		
 		Optional<PortfolioEntity> dbresult= portfolioRepo.findById(portfolioId);
 		if(dbresult.isPresent())
@@ -136,6 +139,9 @@ public class PortfolioService {
 			portfolioEntity.setPortfolioName(portfolioName);
 			portfolioEntity.setPortfolioDescription(portfolioDescription);
 			portfolioEntity.setPortfolioShow(portfolioShow);
+			SectorEntity sectorEntity = new SectorEntity();
+			sectorEntity.setSectorId(sectorId);
+			portfolioEntity.setSectorEntity(sectorEntity);
 			if (portfolioImage != null && !portfolioImage.isEmpty()) {
 	            byte[] imageBytes = portfolioImage.getBytes(); // Read file as bytes
 	            portfolioEntity.setPortfolioImage(imageBytes);
@@ -154,17 +160,27 @@ public class PortfolioService {
 
 		}
 	}
-
-	public PortfolioEntity savePortfolioWithSector(PortfolioEntity portfolioEntity){
-     List<SectorEntity> sectorEntityList=portfolioEntity.getSectorEntity();
-	 if(sectorEntityList != null){
-            for(SectorEntity sector:sectorEntityList){
-				sector.setPortfolioEntity(portfolioEntity);
-			}
-	 }
-		return portfolioRepo.save(portfolioEntity);
-
+	public ResponseEntity<SectorEntity> uploadSector(String sectorName, MultipartFile sectorImage) throws IOException {
+		SectorEntity sectorEntity = new SectorEntity();
+		sectorEntity.setSectorImage(sectorImage.getBytes());
+		sectorEntity.setSectorName(sectorName);
+		Optional<SectorEntity> result=Optional.of(sectorRepo.save(sectorEntity)) ;
+		if(result.isPresent())
+            return ResponseEntity.status(HttpStatus.CREATED).body(result.get());
+		else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.get());}
 	}
+	
+	public ResponseEntity<List<SectorEntity>> getSectors() {
+		Optional<List<SectorEntity>> result=Optional.of(sectorRepo.findAll()) ;
+		if(result.isPresent())
+            return ResponseEntity.status(HttpStatus.OK).body(result.get());
+		else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.get());}
+	}
+
+
+	
 
 	
 
