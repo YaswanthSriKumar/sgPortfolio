@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,6 +79,13 @@ public class Controller {
 		return portfolioService.updateportfolio(portfolioId,portfolioName,portfolioDescription,portfolioShow,portfolioImage,sectorId);
 		
 	}
+    @DeleteMapping("/deletePortfolios/{portfolioIds}")
+    public ResponseEntity<String> deletePortfolio(@PathVariable List<Integer>portfolioIds)
+    {
+    	System.out.println("in to delete in portfoio"+portfolioIds);
+		return portfolioService.deletePortfolio(portfolioIds);
+    	
+    }
 //    methods for Sectors______________________________________________________
 	@PostMapping("/uploadsector")
 	public ResponseEntity<SectorEntity> uploadSector( @RequestParam("sectorName") String sectorName,  @RequestParam("sectorImage") MultipartFile sectorImage ) throws IOException{
@@ -88,6 +96,13 @@ public class Controller {
 	public ResponseEntity<List<SectorEntity>> getSectors()
 	{
 		return portfolioService.getSectors();
+	}
+	
+	@DeleteMapping("/deleteSectors/{Sectorids}")
+	public  ResponseEntity<String> deleteSectors(@PathVariable List<Integer> Sectorids)
+	{
+		return portfolioService.deleteSectors(Sectorids);
+		
 	}
 
 }

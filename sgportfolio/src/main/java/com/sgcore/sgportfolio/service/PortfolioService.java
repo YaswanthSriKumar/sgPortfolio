@@ -31,12 +31,14 @@ public class PortfolioService {
 			MultipartFile portfolioImage,int sectorId) throws IOException {
 		SectorEntity sectorEntity = sectorRepo.findById(sectorId)
 		        .orElseThrow(() -> new EntityNotFoundException("Sector not found"));
+		System.out.println("got into uplode portfolio sectorEntity avilable ");
 		PortfolioEntity portfolioEntity = new PortfolioEntity();
 		portfolioEntity.setPortfolioName(portfolioName);
 		portfolioEntity.setPortfolioDescription(portfolioDescription);
 		portfolioEntity.setPortfolioShow(portfolioShow);
 		
 		portfolioEntity.setSectorEntity(sectorEntity);
+		System.out.println("here is sectorEntity " + sectorEntity.getSectorId());
 		if (portfolioImage != null && !portfolioImage.isEmpty()) {
             portfolioEntity.setPortfolioImage(portfolioImage.getBytes());
         } else {
@@ -165,6 +167,13 @@ public class PortfolioService {
 
 		}
 	}
+	public ResponseEntity<String> deletePortfolio(List<Integer> portfolioIds) {
+		portfolioRepo.deleteAllById(portfolioIds);
+		return ResponseEntity.status(HttpStatus.OK).body("succesfully deleted");
+	}
+	
+	
+	// methods for sector________________________________
 	public ResponseEntity<SectorEntity> uploadSector(String sectorName, MultipartFile sectorImage) throws IOException {
 		SectorEntity sectorEntity = new SectorEntity();
 		sectorEntity.setSectorImage(sectorImage.getBytes());
@@ -189,6 +198,12 @@ public class PortfolioService {
 		else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.get());}
 	}
+	public ResponseEntity<String> deleteSectors(List<Integer> sectorids) {
+		sectorRepo.deleteAllById(sectorids);
+        return ResponseEntity.status(HttpStatus.OK).body("deleted succesfully");
+	}
+	
+	
 
 
 	

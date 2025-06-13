@@ -18,15 +18,15 @@ public class PortfolioEntity {
 	private String portfolioDescription;
 	private boolean portfolioShow;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
     @JoinColumn(name = "sectorId",nullable = false)
-	private SectorEntity SectorEntity;
+	private SectorEntity sectorEntity;
 
 	public SectorEntity getSectorEntity() {
-		return SectorEntity;
+		return sectorEntity;
 	}
 	public void setSectorEntity(SectorEntity sectorEntity) {
-		SectorEntity = sectorEntity;
+		this.sectorEntity = sectorEntity;
 	}
 	public int getPortfolioId() {
 		return portfolioId;
